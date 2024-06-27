@@ -6,6 +6,10 @@
 -- SELECT * from users 
 -- manually place the id into your INSERT INTO values
 
+-- db/seed.sql
+
+\c drippy_db;
+
 -- Insert initial data into the users table
 INSERT INTO users (uid, email, username, photo, created_at, updated_at)
 VALUES 
