@@ -33,7 +33,7 @@ CREATE TABLE users (
 --     weather_type_id INT NOT NULL,
 --     material VARCHAR(50),
 --     prompt TEXT,
---     image_url TEXT,
+--     image_base64 TEXT,
 --     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 --     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
 --     FOREIGN KEY (wardrobe_id) REFERENCES wardrobe(id),
