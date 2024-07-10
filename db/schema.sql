@@ -10,7 +10,7 @@ CREATE TABLE users (
     uid VARCHAR(255) NOT NULL,
     email VARCHAR(100) UNIQUE,
     username VARCHAR(100) UNIQUE,
-    photo VARCHAR(100),
+    photo VARCHAR(2048),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
@@ -24,21 +24,22 @@ CREATE TABLE users (
 --     FOREIGN KEY (user_id) REFERENCES users(id)
 -- );
 
--- CREATE TABLE clothes (
---     id SERIAL PRIMARY KEY,
---     wardrobe_id INT NOT NULL,
---     color VARCHAR(50) NOT NULL,
---     type VARCHAR(50) NOT NULL,
---     sub_type VARCHAR(50) NOT NULL,
---     weather_type_id INT NOT NULL,
---     material VARCHAR(50),
---     prompt TEXT,
---     image_base64 TEXT,
---     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
---     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
---     FOREIGN KEY (wardrobe_id) REFERENCES wardrobe(id),
---     FOREIGN KEY (weather_type_id) REFERENCES weather(id)
--- );
+CREATE TABLE clothes (
+    id SERIAL PRIMARY KEY,
+    wardrobe_id INT NOT NULL,
+    color VARCHAR(50) NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    event_type VARCHAR(50) NOT NULL,
+    weather_type_id INT NOT NULL,
+    waterproof BOOLEAN DEFAULT FALSE,
+    material VARCHAR(50),
+    prompt TEXT,
+    image_base64 TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (wardrobe_id) REFERENCES wardrobe(id),
+    FOREIGN KEY (weather_type_id) REFERENCES weather(id)
+);
 
 -- CREATE TABLE weather (
 --     id SERIAL PRIMARY KEY,
