@@ -41,8 +41,7 @@ VALUES
     ('Very Cold', -50, 0),
     ('Cold', 1, 50),
     ('Mild', 51, 70),
-    ('Warm', 71, 140),
-
+    ('Warm', 71, 140);
 
 -- Insert initial data into the humidity table
 INSERT INTO humidity (humidity_name, min_humidity, max_humidity)
@@ -61,7 +60,7 @@ VALUES
     (2, 'Blue', 2, 3, 2, 4, true, 'Perfect for cold weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (3, 'Green', 3, 2, 3, 2, false, 'Suitable for mild temperatures', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (1, 'Black', 4, 4, 1, 1, true, 'Great for very cold weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'White', 5, 5, 5, 5, false, 'Ideal for hot and humid weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    (2, 'White', 5, 5, 1, 5, false, 'Ideal for hot and humid weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert initial data into the locations table
 -- Please make sure to replace the `user_id` with actual IDs from the users table
