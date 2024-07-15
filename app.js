@@ -6,6 +6,7 @@ const authController = require('./controllers/authController');
 const clothesController = require('./controllers/clothesController');
 const locationsController = require('./controllers/locationsController');
 const typeController = require('./controllers/typeController');
+const materialController = require('./controllers/materialController');
 
 // CONFIGURATION
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/auth', authController);
 app.use('/api/clothes', clothesController);
 app.use('/api/locations', locationsController);
 app.use('/api/types', typeController);
+app.use('/api/materials', materialController);
 
 // ROUTES
 app.get('/', (_req, res) => {
