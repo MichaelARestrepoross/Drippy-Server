@@ -1,6 +1,6 @@
 const db = require('../db/dbConfig');
 
-const getAllClothes = async () => {
+const getAllClothesByUser = async (user_id) => {
   try {
     const allClothes = await db.any(`
       SELECT 
@@ -20,15 +20,16 @@ const getAllClothes = async () => {
       JOIN material m ON c.material_id = m.material_id
       JOIN temperature_range tr ON c.temperature_range_id = tr.temperature_range_id
       JOIN humidity h ON c.humidity_id = h.humidity_id
-    `);
+      WHERE c.user_id = $1
+    `, user_id);
     return allClothes;
   } catch (error) {
-    console.error('Error getting all clothes:', error);
+    console.error('Error getting all clothes by user:', error);
     throw error;
   }
 };
 
-const getClothesById = async (clothes_id) => {
+const getClothesById = async (clothes_id, user_id) => {
   try {
     const clothes = await db.one(`
       SELECT 
@@ -48,11 +49,11 @@ const getClothesById = async (clothes_id) => {
       JOIN material m ON c.material_id = m.material_id
       JOIN temperature_range tr ON c.temperature_range_id = tr.temperature_range_id
       JOIN humidity h ON c.humidity_id = h.humidity_id
-      WHERE c.clothes_id = $1
-    `, clothes_id);
+      WHERE c.clothes_id = $1 AND c.user_id = $2
+    `, [clothes_id, user_id]);
     return clothes;
   } catch (error) {
-    console.error('Error getting clothes by ID:', error);
+    console.error('Error getting clothes by ID and user:', error);
     throw error;
   }
 };
@@ -82,9 +83,8 @@ const createClothes = async (clothes) => {
   }
 };
 
-const updateClothesById = async (clothes_id, clothes) => {
+const updateClothesById = async (clothes_id, user_id, clothes) => {
   const {
-    user_id,
     color,
     type_id,
     material_id,
@@ -98,31 +98,31 @@ const updateClothesById = async (clothes_id, clothes) => {
 
   try {
     const updatedClothes = await db.one(
-      'UPDATE clothes SET user_id=$1, color=$2, type_id=$3, material_id=$4, temperature_range_id=$5, humidity_id=$6, waterproof=$7, prompt=$8, image_base64=$9, updated_at=$10 WHERE clothes_id=$11 RETURNING *',
-      [user_id, color, type_id, material_id, temperature_range_id, humidity_id, waterproof, prompt, image_base64, updated_at, clothes_id]
+      'UPDATE clothes SET color=$1, type_id=$2, material_id=$3, temperature_range_id=$4, humidity_id=$5, waterproof=$6, prompt=$7, image_base64=$8, updated_at=$9 WHERE clothes_id=$10 AND user_id=$11 RETURNING *',
+      [color, type_id, material_id, temperature_range_id, humidity_id, waterproof, prompt, image_base64, updated_at, clothes_id, user_id]
     );
     return updatedClothes;
   } catch (error) {
-    console.error('Error updating clothes by ID:', error);
+    console.error('Error updating clothes by ID and user:', error);
     throw error;
   }
 };
 
-const deleteClothesById = async (clothes_id) => {
+const deleteClothesById = async (clothes_id, user_id) => {
   try {
     const deletedClothes = await db.one(
-      'DELETE FROM clothes WHERE clothes_id = $1 RETURNING *',
-      clothes_id
+      'DELETE FROM clothes WHERE clothes_id = $1 AND user_id = $2 RETURNING *',
+      [clothes_id, user_id]
     );
     return deletedClothes;
   } catch (error) {
-    console.error('Error deleting clothes by ID:', error);
+    console.error('Error deleting clothes by ID and user:', error);
     throw error;
   }
 };
 
 module.exports = {
-  getAllClothes,
+  getAllClothesByUser,
   getClothesById,
   createClothes,
   updateClothesById,
