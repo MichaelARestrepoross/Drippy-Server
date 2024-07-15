@@ -38,9 +38,9 @@ VALUES
 -- Insert initial data into the temperature_range table
 INSERT INTO temperature_range (temperature_range_name, min_temp, max_temp)
 VALUES 
-    ('Very Cold', -30, 0),
-    ('Cold', 1, 50),
-    ('Mild', 51, 70),
+    ('Very Cold', -30, 20),
+    ('Cold', 21, 60),
+    ('Mild', 61, 70),
     ('Warm', 71, 90),
     ('Hot', 91, 120);
 
