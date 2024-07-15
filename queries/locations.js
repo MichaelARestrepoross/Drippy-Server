@@ -1,8 +1,8 @@
 const db = require('../db/dbConfig');
 
-const getAllLocations = async () => {
+const getAllLocationsByUser = async (user_id) => {
   try {
-    const allLocations = await db.any('SELECT * FROM locations');
+    const allLocations = await db.any('SELECT * FROM locations WHERE user_id = $1', user_id);
     return allLocations;
   } catch (error) {
     console.error('Error getting all locations:', error);
@@ -10,9 +10,9 @@ const getAllLocations = async () => {
   }
 };
 
-const getLocationById = async (location_id) => {
+const getLocationById = async (location_id, user_id) => {
   try {
-    const location = await db.one('SELECT * FROM locations WHERE location_id = $1', location_id);
+    const location = await db.one('SELECT * FROM locations WHERE location_id = $1 AND user_id = $2', [location_id, user_id]);
     return location;
   } catch (error) {
     console.error('Error getting location by ID:', error);
@@ -34,12 +34,9 @@ const createLocation = async (location) => {
   }
 };
 
-const deleteLocationById = async (location_id) => {
+const deleteLocationById = async (location_id, user_id) => {
   try {
-    const deletedLocation = await db.one(
-      'DELETE FROM locations WHERE location_id = $1 RETURNING *',
-      location_id
-    );
+    const deletedLocation = await db.one('DELETE FROM locations WHERE location_id = $1 AND user_id = $2 RETURNING *', [location_id, user_id]);
     return deletedLocation;
   } catch (error) {
     console.error('Error deleting location by ID:', error);
@@ -47,12 +44,12 @@ const deleteLocationById = async (location_id) => {
   }
 };
 
-const updateLocationById = async (location_id, location) => {
-  const { user_id, name, x_coordinate, y_coordinate, updated_at } = location;
+const updateLocationById = async (location_id, user_id, location) => {
+  const { name, x_coordinate, y_coordinate, updated_at } = location;
   try {
     const updatedLocation = await db.one(
-      'UPDATE locations SET user_id = $1, name = $2, x_coordinate = $3, y_coordinate = $4, updated_at = $5 WHERE location_id = $6 RETURNING *',
-      [user_id, name, x_coordinate, y_coordinate, updated_at, location_id]
+      'UPDATE locations SET name = $1, x_coordinate = $2, y_coordinate = $3, updated_at = $4 WHERE location_id = $5 AND user_id = $6 RETURNING *',
+      [name, x_coordinate, y_coordinate, updated_at, location_id, user_id]
     );
     return updatedLocation;
   } catch (error) {
@@ -62,7 +59,7 @@ const updateLocationById = async (location_id, location) => {
 };
 
 module.exports = {
-  getAllLocations,
+  getAllLocationsByUser,
   getLocationById,
   createLocation,
   deleteLocationById,
