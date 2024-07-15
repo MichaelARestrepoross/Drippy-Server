@@ -2,26 +2,28 @@ const express = require('express');
 const clothes = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
 const {
-  getAllClothes,
+  getAllClothesByUser,
   getClothesById,
   createClothes,
+  updateClothesById,
   deleteClothesById,
-  updateClothesById
 } = require('../queries/clothes');
 
-clothes.get('/', async (req, res) => {
+clothes.get('/', authMiddleware, async (req, res) => {
+  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
   try {
-    const allClothes = await getAllClothes();
+    const allClothes = await getAllClothesByUser(user_id);
     res.status(200).json(allClothes);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-clothes.get('/:clothes_id', async (req, res) => {
+clothes.get('/:clothes_id', authMiddleware, async (req, res) => {
   const { clothes_id } = req.params;
+  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
   try {
-    const clothes = await getClothesById(clothes_id);
+    const clothes = await getClothesById(clothes_id, user_id);
     if (clothes) {
       res.status(200).json(clothes);
     } else {
@@ -33,8 +35,9 @@ clothes.get('/:clothes_id', async (req, res) => {
 });
 
 clothes.post('/', authMiddleware, async (req, res) => {
+  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
   try {
-    const newClothes = await createClothes(req.body);
+    const newClothes = await createClothes({ ...req.body, user_id });
     res.status(201).json(newClothes);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -43,8 +46,9 @@ clothes.post('/', authMiddleware, async (req, res) => {
 
 clothes.put('/:clothes_id', authMiddleware, async (req, res) => {
   const { clothes_id } = req.params;
+  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
   try {
-    const updatedClothes = await updateClothesById(clothes_id, req.body);
+    const updatedClothes = await updateClothesById(clothes_id, user_id, req.body);
     res.status(200).json(updatedClothes);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -53,8 +57,9 @@ clothes.put('/:clothes_id', authMiddleware, async (req, res) => {
 
 clothes.delete('/:clothes_id', authMiddleware, async (req, res) => {
   const { clothes_id } = req.params;
+  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
   try {
-    const deletedClothes = await deleteClothesById(clothes_id);
+    const deletedClothes = await deleteClothesById(clothes_id, user_id);
     res.status(200).json(deletedClothes);
   } catch (error) {
     res.status(404).json({ error: 'Clothes not found with this ID' });
