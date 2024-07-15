@@ -8,6 +8,7 @@ const locationsController = require('./controllers/locationsController');
 const typeController = require('./controllers/typeController');
 const materialController = require('./controllers/materialController');
 const temperatureRangeController = require('./controllers/temperatureRangeController');
+const humidityController = require('./controllers/humidityController');
 
 // CONFIGURATION
 const app = express();
@@ -28,6 +29,7 @@ app.use('/api/locations', locationsController);
 app.use('/api/types', typeController);
 app.use('/api/materials', materialController);
 app.use('/api/temperature-ranges', temperatureRangeController);
+app.use('/api/humidity-levels', humidityController);
 
 // ROUTES
 app.get('/', (_req, res) => {
