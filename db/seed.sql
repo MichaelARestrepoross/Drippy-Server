@@ -60,7 +60,10 @@ VALUES
     (2, 'Blue', 2, 3, 2, 4, true, 'Perfect for cold weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (3, 'Green', 3, 2, 3, 2, false, 'Suitable for mild temperatures', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     (1, 'Black', 4, 4, 1, 1, true, 'Great for very cold weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    (2, 'White', 5, 5, 1, 5, false, 'Ideal for hot and humid weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+    (2, 'White', 5, 5, 1, 5, false, 'Ideal for hot and humid weather', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3, 'Yellow', 1, 2, 4, 3, false, 'Bright and sunny day wear', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3, 'Purple', 4, 3, 3, 4, true, 'Cool evenings outfit', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (3, 'Brown', 1, 1, 2, 2, false, 'Casual daily wear', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- Insert initial data into the locations table
 -- Please make sure to replace the `user_id` with actual IDs from the users table
