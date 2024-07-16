@@ -1,6 +1,6 @@
 const db = require('../db/dbConfig');
 
-const getAllClothesByUser = async (user_id) => {
+const getAllClothesByUser = async (uid) => {
   try {
     const allClothes = await db.any(`
       SELECT 
@@ -20,8 +20,9 @@ const getAllClothesByUser = async (user_id) => {
       JOIN material m ON c.material_id = m.material_id
       JOIN temperature_range tr ON c.temperature_range_id = tr.temperature_range_id
       JOIN humidity h ON c.humidity_id = h.humidity_id
-      WHERE c.user_id = $1
-    `, user_id);
+      WHERE u.uid = $1
+    `, [uid]);
+
     return allClothes;
   } catch (error) {
     console.error('Error getting all clothes by user:', error);
@@ -31,7 +32,7 @@ const getAllClothesByUser = async (user_id) => {
 
 const getClothesById = async (clothes_id, user_id) => {
   try {
-    const clothes = await db.one(`
+    const clothes = await db.oneOrNone(`
       SELECT 
         c.*, 
         u.username, 
@@ -53,29 +54,19 @@ const getClothesById = async (clothes_id, user_id) => {
     `, [clothes_id, user_id]);
     return clothes;
   } catch (error) {
-    console.error('Error getting clothes by ID and user:', error);
+    console.error('Error getting clothes by ID:', error);
     throw error;
   }
 };
 
 const createClothes = async (clothes) => {
-  const {
-    user_id,
-    color,
-    type_id,
-    material_id,
-    temperature_range_id,
-    humidity_id,
-    waterproof,
-    prompt,
-    image_base64,
-  } = clothes;
-
+  const { user_id, type_id, material_id, temperature_range_id, humidity_id, name, description } = clothes;
   try {
-    const newClothes = await db.one(
-      'INSERT INTO clothes (user_id, color, type_id, material_id, temperature_range_id, humidity_id, waterproof, prompt, image_base64) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *',
-      [user_id, color, type_id, material_id, temperature_range_id, humidity_id, waterproof, prompt, image_base64]
-    );
+    const newClothes = await db.one(`
+      INSERT INTO clothes (user_id, type_id, material_id, temperature_range_id, humidity_id, name, description)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *
+    `, [user_id, type_id, material_id, temperature_range_id, humidity_id, name, description]);
     return newClothes;
   } catch (error) {
     console.error('Error creating clothes:', error);
@@ -83,40 +74,32 @@ const createClothes = async (clothes) => {
   }
 };
 
-const updateClothesById = async (clothes_id, user_id, clothes) => {
-  const {
-    color,
-    type_id,
-    material_id,
-    temperature_range_id,
-    humidity_id,
-    waterproof,
-    prompt,
-    image_base64,
-    updated_at
-  } = clothes;
-
+const updateClothesById = async (clothes_id, user_id, updates) => {
+  const { type_id, material_id, temperature_range_id, humidity_id, name, description, updated_at } = updates;
   try {
-    const updatedClothes = await db.one(
-      'UPDATE clothes SET color=$1, type_id=$2, material_id=$3, temperature_range_id=$4, humidity_id=$5, waterproof=$6, prompt=$7, image_base64=$8, updated_at=$9 WHERE clothes_id=$10 AND user_id=$11 RETURNING *',
-      [color, type_id, material_id, temperature_range_id, humidity_id, waterproof, prompt, image_base64, updated_at, clothes_id, user_id]
-    );
+    const updatedClothes = await db.one(`
+      UPDATE clothes 
+      SET type_id = $1, material_id = $2, temperature_range_id = $3, humidity_id = $4, name = $5, description = $6, updated_at = $7
+      WHERE clothes_id = $8 AND user_id = $9
+      RETURNING *
+    `, [type_id, material_id, temperature_range_id, humidity_id, name, description, updated_at, clothes_id, user_id]);
     return updatedClothes;
   } catch (error) {
-    console.error('Error updating clothes by ID and user:', error);
+    console.error('Error updating clothes by ID:', error);
     throw error;
   }
 };
 
 const deleteClothesById = async (clothes_id, user_id) => {
   try {
-    const deletedClothes = await db.one(
-      'DELETE FROM clothes WHERE clothes_id = $1 AND user_id = $2 RETURNING *',
-      [clothes_id, user_id]
-    );
+    const deletedClothes = await db.one(`
+      DELETE FROM clothes 
+      WHERE clothes_id = $1 AND user_id = $2
+      RETURNING *
+    `, [clothes_id, user_id]);
     return deletedClothes;
   } catch (error) {
-    console.error('Error deleting clothes by ID and user:', error);
+    console.error('Error deleting clothes by ID:', error);
     throw error;
   }
 };
