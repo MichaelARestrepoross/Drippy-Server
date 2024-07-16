@@ -21,7 +21,7 @@ locations.get('/', authMiddleware, async (req, res) => {
 
 locations.get('/:location_id', authMiddleware, async (req, res) => {
   const { location_id } = req.params;
-  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
+  const user_id = req.user.id; 
   try {
     const location = await getLocationById(location_id, user_id);
     if (location) {
@@ -35,7 +35,7 @@ locations.get('/:location_id', authMiddleware, async (req, res) => {
 });
 
 locations.post('/', authMiddleware, async (req, res) => {
-  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
+  const user_id = req.user.id; 
   try {
     const newLocation = await createLocation({ ...req.body, user_id });
     res.status(201).json(newLocation);
@@ -46,7 +46,7 @@ locations.post('/', authMiddleware, async (req, res) => {
 
 locations.put('/:location_id', authMiddleware, async (req, res) => {
   const { location_id } = req.params;
-  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
+  const user_id = req.user.id; 
   try {
     const updatedLocation = await updateLocationById(location_id, user_id, req.body);
     res.status(200).json(updatedLocation);
@@ -57,7 +57,7 @@ locations.put('/:location_id', authMiddleware, async (req, res) => {
 
 locations.delete('/:location_id', authMiddleware, async (req, res) => {
   const { location_id } = req.params;
-  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
+  const user_id = req.user.id; 
   try {
     const deletedLocation = await deleteLocationById(location_id, user_id);
     res.status(200).json(deletedLocation);
