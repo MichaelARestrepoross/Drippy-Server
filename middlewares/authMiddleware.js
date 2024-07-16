@@ -16,9 +16,11 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token)
-
-    req.user = decodedToken
-
+    const user = await admin.auth().getUser(decodedToken.uid); // Fetch user details
+    console.log("Decoded token: ", decodedToken);
+    console.log("User: ", user);
+    req.user = user;
+    
     next()
   } catch (error) {
     res.status(403).json({ message: 'Invalid Token' })
