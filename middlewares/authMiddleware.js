@@ -17,7 +17,7 @@ const authMiddleware = async (req, res, next) => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(token)
     const user = await admin.auth().getUser(decodedToken.uid); // Fetch user details
-    console.log("Decoded token: ", decodedToken);
+    // console.log("Decoded token: ", decodedToken);
     console.log("User: ", user);
     req.user = user;
     

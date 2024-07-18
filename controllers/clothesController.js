@@ -13,7 +13,7 @@ clothes.get('/', authMiddleware, async (req, res) => {
   const user_id = req.user.uid;
   try {
       const allClothes = await getAllClothesByUser(user_id);
-      console.log("My clothes: ", allClothes)
+    //   console.log("My clothes: ", allClothes)
     res.status(200).json(allClothes);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
