@@ -56,7 +56,7 @@ CREATE TABLE clothes (
     waterproof BOOLEAN,
     prompt TEXT,
     image_base64 TEXT,
-    -- image_url TEXT,
+    image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
