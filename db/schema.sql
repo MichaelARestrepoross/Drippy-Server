@@ -56,9 +56,10 @@ CREATE TABLE clothes (
     waterproof BOOLEAN,
     prompt TEXT,
     image_base64 TEXT,
+    image_url TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (type_id) REFERENCES type(type_id),
     FOREIGN KEY (material_id) REFERENCES material(material_id),
     FOREIGN KEY (temperature_range_id) REFERENCES temperature_range(temperature_range_id),
@@ -72,5 +73,5 @@ CREATE TABLE locations (
     name VARCHAR(100) NOT NULL,
     x_coordinate FLOAT NOT NULL,
     y_coordinate FLOAT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
