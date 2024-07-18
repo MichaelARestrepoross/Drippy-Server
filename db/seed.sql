@@ -24,7 +24,12 @@ VALUES
     ('Jacket'),
     ('Sweater'),
     ('Shorts'),
-    ('Pants');
+    ('Pants'),
+    ('Tank-Top'),
+    ('Sandals'),
+    ('Sneakers'),
+    ('Boots'),
+    ('Heels');
 
 -- Insert initial data into the material table
 INSERT INTO material (material_name)
@@ -33,7 +38,11 @@ VALUES
     ('Polyester'),
     ('Wool'),
     ('Silk'),
-    ('Denim');
+    ('Denim'),
+    ('Leather'),
+    ('Latex'),
+    ('Rubber'),
+    ('Canvas');
 
 -- Insert initial data into the temperature_range table
 INSERT INTO temperature_range (temperature_range_name, min_temp, max_temp)
