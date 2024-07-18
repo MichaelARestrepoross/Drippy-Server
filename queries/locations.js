@@ -1,14 +1,33 @@
 const db = require('../db/dbConfig');
 
 const getAllLocationsByUser = async (user_id) => {
-  try {
-    const allLocations = await db.any('SELECT * FROM locations WHERE user_id = $1', user_id);
-    return allLocations;
-  } catch (error) {
-    console.error('Error getting all locations:', error);
-    throw error;
-  }
-};
+    try {
+      const query = `
+        SELECT 
+          locations.location_id, 
+          locations.name, 
+          locations.x_coordinate, 
+          locations.y_coordinate, 
+          users.uid, 
+          users.email, 
+          users.username, 
+          users.photo
+        FROM 
+          locations 
+        JOIN 
+          users 
+        ON 
+          locations.user_id = users.id 
+        WHERE 
+          locations.user_id = $1
+      `;
+      const locations = await db.any(query, user_id);
+      return locations;
+    } catch (error) {
+      console.error('Error fetching locations for user:', error);
+      throw error;
+    }
+  };
 
 const getLocationById = async (location_id, user_id) => {
   try {

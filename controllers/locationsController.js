@@ -8,22 +8,48 @@ const {
   deleteLocationById,
   updateLocationById
 } = require('../queries/locations');
+const { findUserByUID } = require('../queries/users');
 
-locations.get('/', authMiddleware, async (req, res) => {
-  const user_id = req.user.id; // Assuming the user ID is stored in req.user by the authMiddleware
+locations.use(authMiddleware);
+
+locations.get('/', async (req, res) => {
+  const uid = req.user.uid;
   try {
-    const allLocations = await getAllLocationsByUser(user_id);
-    res.status(200).json(allLocations);
+    const user = await findUserByUID(uid);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const locations = await getAllLocationsByUser(user.id);
+    const response = {
+      user: {
+        uid: user.uid,
+        email: user.email,
+        username: user.username,
+        photo: user.photo,
+      },
+      locations: locations.map(location => ({
+        location_id: location.location_id,
+        name: location.name,
+        x_coordinate: location.x_coordinate,
+        y_coordinate: location.y_coordinate,
+      })),
+    };
+    res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
 });
 
-locations.get('/:location_id', authMiddleware, async (req, res) => {
+
+locations.get('/:location_id', async (req, res) => {
   const { location_id } = req.params;
-  const user_id = req.user.id; 
+  const uid = req.user.uid;
   try {
-    const location = await getLocationById(location_id, user_id);
+    const user = await findUserByUID(uid);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const location = await getLocationById(location_id, user.id);
     if (location) {
       res.status(200).json(location);
     } else {
@@ -34,32 +60,44 @@ locations.get('/:location_id', authMiddleware, async (req, res) => {
   }
 });
 
-locations.post('/', authMiddleware, async (req, res) => {
-  const user_id = req.user.id; 
+locations.post('/', async (req, res) => {
+  const uid = req.user.uid;
   try {
-    const newLocation = await createLocation({ ...req.body, user_id });
+    const user = await findUserByUID(uid);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const newLocation = await createLocation({ ...req.body, user_id: user.id });
     res.status(201).json(newLocation);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-locations.put('/:location_id', authMiddleware, async (req, res) => {
+locations.put('/:location_id', async (req, res) => {
   const { location_id } = req.params;
-  const user_id = req.user.id; 
+  const uid = req.user.uid;
   try {
-    const updatedLocation = await updateLocationById(location_id, user_id, req.body);
+    const user = await findUserByUID(uid);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const updatedLocation = await updateLocationById(location_id, user.id, req.body);
     res.status(200).json(updatedLocation);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 });
 
-locations.delete('/:location_id', authMiddleware, async (req, res) => {
+locations.delete('/:location_id', async (req, res) => {
   const { location_id } = req.params;
-  const user_id = req.user.id; 
+  const uid = req.user.uid;
   try {
-    const deletedLocation = await deleteLocationById(location_id, user_id);
+    const user = await findUserByUID(uid);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const deletedLocation = await deleteLocationById(location_id, user.id);
     res.status(200).json(deletedLocation);
   } catch (error) {
     res.status(404).json({ error: 'Location not found with this ID' });
