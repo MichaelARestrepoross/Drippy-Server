@@ -1,6 +1,7 @@
 const express = require('express');
 const clothes = express.Router();
 const authMiddleware = require('../middlewares/authMiddleware');
+const {findUserByUID} = require('../queries/users.js');
 const {
   getAllClothesByUser,
   getClothesById,
