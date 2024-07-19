@@ -50,7 +50,9 @@ clothes.post('/', authMiddleware, async (req, res) => {
 
 clothes.put('/:clothes_id', authMiddleware, async (req, res) => {
   const { clothes_id } = req.params;
-  const user_id = req.user.uid;
+  const user_uid = req.user.uid;
+  const user = await findUserByUID(user_uid);
+  const user_id = user.id;
   try {
     const updatedClothes = await updateClothesById(clothes_id, user_id, req.body);
     res.status(200).json(updatedClothes);
@@ -61,7 +63,9 @@ clothes.put('/:clothes_id', authMiddleware, async (req, res) => {
 
 clothes.delete('/:clothes_id', authMiddleware, async (req, res) => {
   const { clothes_id } = req.params;
-  const user_id = req.user.uid;
+  const user_uid = req.user.uid;
+  const user = await findUserByUID(user_uid);
+  const user_id = user.id;
   try {
     const deletedClothes = await deleteClothesById(clothes_id, user_id);
     res.status(200).json(deletedClothes);
