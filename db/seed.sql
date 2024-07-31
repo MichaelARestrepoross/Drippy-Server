@@ -29,7 +29,9 @@ VALUES
     ('Sandals'),
     ('Sneakers'),
     ('Boots'),
-    ('Heels');
+    ('Heels'),
+    ('Suit'),
+    ('Button-Up Shirt');
 
 -- Insert initial data into the material table
 INSERT INTO material (material_name)
